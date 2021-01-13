@@ -1,0 +1,14 @@
+
+
+Die jar "mysql-connector-java-8.0.22.jar" muss in der IDE eingebunden werden (IDE muss wissen, dass es sich um ein Java projekt handelt)
+Wenn VSCode verwendet wird kann die jar Datei mit diesem ".vscod/settings.json" Eintrag eingebunden werden.
+
+--------------------------------------------------------------
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "sqlprogramm/lib/mysql-connector-java-8.0.22.jar"
+    ]
+}
+--------------------------------------------------------------
+

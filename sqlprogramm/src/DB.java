@@ -41,7 +41,7 @@ public class DB {
 
         try {
             System.out.println("* Treiber laden");
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
         } catch (Exception e) {
             System.err.println("Unable to load driver.");
