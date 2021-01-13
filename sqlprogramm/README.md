@@ -1,6 +1,18 @@
-## Getting Started
+## Hinweise
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+Die jar "mysql-connector-java-8.0.22.jar" muss in der IDE eingebunden werden
+(IDE muss wissen, dass es sich um ein Java projekt handelt und dass diese jar vom Projekt benutzt wird)
+
+Wenn VSCode verwendet wird, kann die jar Datei mit diesem ".vscode/settings.json" Eintrag eingebunden werden.
+
+```json
+{
+  "java.project.referencedLibraries": [
+    "lib/**/*.jar",
+    "sqlprogramm/lib/mysql-connector-java-8.0.22.jar"
+  ]
+}
+```
 
 ## Folder Structure
 
