@@ -30,11 +30,11 @@ import java.util.Scanner;
 
 public class DB {
 
-    final String hostname = "localhost";
+    final String hostname = "192.168.2.221";
     final String port = "3306";
-    final String dbname = "schule";
-    final String user = "root";
-    final String password = "";
+    final String dbname = "school";
+    final String user = "test";
+    final String password = "t3st@D3MO";
     Connection con = null;
 
     DB() {
