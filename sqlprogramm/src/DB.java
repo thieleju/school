@@ -23,34 +23,40 @@
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Scanner;
 
 public class DB {
-
-    final String hostname = "192.168.2.221";
-    final String port = "3306";
-    final String dbname = "school";
-    final String user = "test";
-    final String password = "t3st@D3MO";
+    String hostname;
+    String port;
+    String dbname;
+    String user;
+    String password;
     Connection con = null;
 
-    DB() {
+    DB(String hostname, String port, String dbname, String user, String password) {
+
+        this.hostname = hostname;
+        this.port = port;
+        this.dbname = dbname;
+        this.user = user;
+        this.password = password;
 
         try {
-            System.out.println("* Treiber laden");
+            System.out.println("-> Driver loaded");
             Class.forName("com.mysql.cj.jdbc.Driver");
 
         } catch (Exception e) {
-            System.err.println("Unable to load driver.");
+            System.err.println("Unable to load driver!");
             e.printStackTrace();
         }
 
         try {
-            System.out.println("* Verbindung aufbauen");
             String url = "jdbc:mysql://" + hostname + ":" + port + "/" + dbname;
+            System.out.println("->  Connected to " + url);
 
             con = DriverManager.getConnection(url, user, password);
 
@@ -61,6 +67,71 @@ public class DB {
             sqle.printStackTrace();
         }
 
+    }
+
+    void createNewKunde() {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Geben Sie Ihren Vornamen ein: ");
+        String vorname = sc.nextLine();
+        System.out.println("Geben Sie Ihren Nachname ein: ");
+        String nachname = sc.nextLine();
+        System.out.println("Geben Sie Ihre Straße ein: ");
+        String strasse = sc.nextLine();
+        System.out.println("Geben Sie Ihre PLZ ein: ");
+        String plz = sc.nextLine();
+        System.out.println("Geben Sie Ihren Ort ein: ");
+        String ort = sc.nextLine();
+
+        sc.close();
+
+        try {
+            String sqlQuery = "insert into kunde (vorname, nachname, strasse, plz, ort) values (?,?,?,?,?);";
+            PreparedStatement ps = con.prepareStatement(sqlQuery);
+
+            ps.setString(1, vorname);
+            ps.setString(2, nachname);
+            ps.setString(3, strasse);
+            ps.setString(4, plz);
+            ps.setString(5, ort);
+
+            ps.execute();
+
+            System.out.println("-> Kunde " + vorname + " " + nachname + " erfolgreich angelegt!");
+        } catch (SQLException e) {
+            System.out.println(e);
+            System.out.println("Failed to create new kunde");
+        }
+    }
+
+    void createNewArtikel() {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Geben Sie die Bezeichnung ein: ");
+        String bezeichnung = sc.nextLine();
+        System.out.println("Geben Sie den NettoPreis ein: ");
+        Double nettoPreis = sc.nextDouble();
+        System.out.println("Geben Sie die MwSt ein: ");
+        Double mwst = sc.nextDouble();
+
+        sc.close();
+
+        try {
+            String sqlQuery = "insert into artikel (bezeichnung, nettoPreis, mwSt) values (?,?,?);";
+            PreparedStatement ps = con.prepareStatement(sqlQuery);
+
+            ps.setString(1, bezeichnung);
+            ps.setDouble(2, nettoPreis);
+            ps.setDouble(3, mwst);
+
+            ps.execute();
+
+            System.out.println("-> Artikel " + bezeichnung + " erfolgreich angelegt!");
+        } catch (SQLException e) {
+            System.out.println(e);
+            System.out.println("Failed to create new artikel");
+        }
     }
 
     void suchen() {

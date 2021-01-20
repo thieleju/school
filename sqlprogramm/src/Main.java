@@ -27,24 +27,28 @@ public class Main {
 
     public static void main(String[] args) {
 
-        int wahl;
-        Scanner sc = new Scanner(System.in);
-        DB db = new DB();
+        // create DB object
+        DB db = new DB("192.168.2.221", "3306", "school", "test", "t3st@D3MO");
 
-        do {
+        db.createNewKunde();
 
-            // Menue
-            System.out.println("1 - Kunden suchen");
-            System.out.println("2 - neuen Kunden einfuegen");
-            System.out.println("0 - Ende");
+        // int wahl;
+        // Scanner sc = new Scanner(System.in);
 
-            wahl = sc.nextInt();
+        // do {
 
-            if (wahl == 1) {
-                db.suchen();
-            }
+        // // Menue
+        // System.out.println("1 - Kunden suchen");
+        // System.out.println("2 - neuen Kunden einfuegen");
+        // System.out.println("0 - Ende");
 
-        } while (wahl != 0);
+        // wahl = sc.nextInt();
+
+        // if (wahl == 1) {
+        // db.suchen();
+        // }
+
+        // } while (wahl != 0);
 
         db.end();
     }
