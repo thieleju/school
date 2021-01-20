@@ -71,7 +71,6 @@ public class DB {
 
     void createNewKunde() {
         Scanner sc = new Scanner(System.in);
-
         System.out.println("Geben Sie Ihren Vornamen ein: ");
         String vorname = sc.nextLine();
         System.out.println("Geben Sie Ihren Nachname ein: ");
@@ -82,7 +81,6 @@ public class DB {
         String plz = sc.nextLine();
         System.out.println("Geben Sie Ihren Ort ein: ");
         String ort = sc.nextLine();
-
         sc.close();
 
         try {
@@ -105,16 +103,13 @@ public class DB {
     }
 
     void createNewArtikel() {
-
         Scanner sc = new Scanner(System.in);
-
         System.out.println("Geben Sie die Bezeichnung ein: ");
         String bezeichnung = sc.nextLine();
         System.out.println("Geben Sie den NettoPreis ein: ");
         Double nettoPreis = sc.nextDouble();
         System.out.println("Geben Sie die MwSt ein: ");
         Double mwst = sc.nextDouble();
-
         sc.close();
 
         try {
@@ -131,6 +126,40 @@ public class DB {
         } catch (SQLException e) {
             System.out.println(e);
             System.out.println("Failed to create new artikel");
+        }
+    }
+
+    void printSearchedKunden(int von, int bis) {
+        try {
+            String sqlQuery = "select * from kunde where idkunde between " + von + " and " + bis + ";";
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(sqlQuery);
+
+            printTable(rs);
+
+            stmt.close();
+
+        } catch (SQLException e) {
+            System.out.println(e);
+            System.out.println("Failed to search for kunden");
+        }
+    }
+
+    void printTable(ResultSet rs) {
+        try {
+            int columnsNumber = rs.getMetaData().getColumnCount();
+            while (rs.next()) {
+                for (int i = 1; i <= columnsNumber; i++) {
+                    if (i > 1)
+                        System.out.print(" | ");
+                    String columnValue = rs.getString(i);
+                    System.out.print(rs.getMetaData().getColumnName(i) + ": " + columnValue);
+                }
+                System.out.println("");
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+            System.out.println("Failed to search for kunden");
         }
     }
 
@@ -178,9 +207,9 @@ public class DB {
 
     }
 
-    public void end() {
+    public void close() {
         try {
-            System.out.println("* Datenbank-Verbindung beenden");
+            System.out.println("-> Datenbank-Verbindung beendet");
             con.close();
         } catch (SQLException e) {
             System.out.println("Fehler: " + e);
