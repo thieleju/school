@@ -129,9 +129,12 @@ public class DB {
         }
     }
 
-    void printSearchedKunden(int von, int bis) {
+    void printKundeVonBis(int von, int bis) {
+        printSelectQuery("select * from kunde where idkunde between " + von + " and " + bis + ";");
+    }
+
+    void printSelectQuery(String sqlQuery) {
         try {
-            String sqlQuery = "select * from kunde where idkunde between " + von + " and " + bis + ";";
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sqlQuery);
 

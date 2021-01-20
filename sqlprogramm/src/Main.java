@@ -27,20 +27,14 @@ public class Main {
         // create DB object
         DB db = new DB("192.168.2.221", "3306", "school", "test", "t3st@D3MO");
 
-        db.printSearchedKunden(2, 4);
+        db.createNewKunde();
 
-        // int wahl;
-        // Scanner sc = new Scanner(System.in);
-        // do {
-        // // Menue
-        // System.out.println("1 - Kunden suchen");
-        // System.out.println("2 - neuen Kunden einfuegen");
-        // System.out.println("0 - Ende");
-        // wahl = sc.nextInt();
-        // if (wahl == 1) {
-        // db.suchen();
-        // }
-        // } while (wahl != 0);
+        db.createNewArtikel();
+
+        db.printKundeVonBis(3, 4);
+
+        db.printSelectQuery(
+                "Select * from kunde as k left join rechnung as r on r.kundenNr = k.idkunde where r.kundenNr IS NULL;");
 
         db.close();
     }
