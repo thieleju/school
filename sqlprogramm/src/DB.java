@@ -117,19 +117,9 @@ public class DB {
         try {
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sqlQuery);
+            System.out.println("Query: " + sqlQuery);
 
-            printTable(rs);
-
-            stmt.close();
-
-        } catch (SQLException e) {
-            System.out.println(e);
-            System.out.println("Failed to search for kunden");
-        }
-    }
-
-    void printTable(ResultSet rs) {
-        try {
+            // print table
             int columnsNumber = rs.getMetaData().getColumnCount();
             while (rs.next()) {
                 for (int i = 1; i <= columnsNumber; i++) {
@@ -140,54 +130,13 @@ public class DB {
                 }
                 System.out.println("");
             }
+
+            stmt.close();
+
         } catch (SQLException e) {
             System.out.println(e);
             System.out.println("Failed to search for kunden");
         }
-    }
-
-    void suchen() {
-
-        String name;
-        int id;
-
-        try {
-            Statement stmt = con.createStatement();
-            ResultSet rs;
-
-            stmt = con.createStatement();
-
-            Scanner sc = new Scanner(System.in);
-            System.out.print("Name: ");
-            String eingabe = sc.next();
-
-            String sqlQuery = "SELECT * FROM kunde;";
-
-            // Die Anfrage wird an die DB gesendet und das Resultset wird zurueckgegeben
-            // und kann dann mit der Variable rs weiterverarbeitet werden.
-            // Die Klasse Statement besitzt noch andere Methoden, die ggf. benutzt werden
-            // muessen
-            rs = stmt.executeQuery(sqlQuery);
-
-            // Dies ist normalerweise unnoetig, man erhaelt so die Anzahl der Spalten
-            int spalten = rs.getMetaData().getColumnCount();
-            System.out.println("Anzahl Spalten: " + spalten);
-
-            // mit rs.next() wird immer der naechste Datensatz geholt, bis es keine mehr
-            // gibt.
-            // Auch die Klasse Resultset hat andere Methoden, die recht nuetzlich sind.
-            while (rs.next()) {
-                // mit get... erhaelt man den Wert der jeweiligen Spalte (1,2,3,....)
-                id = rs.getInt(1);
-                name = rs.getString(2);
-
-                System.out.println("Id: " + id + ",  Name: " + name);
-            }
-            stmt.close();
-        } catch (SQLException e) {
-            System.out.println("Fehler: " + e);
-        }
-
     }
 
     public void close() {
