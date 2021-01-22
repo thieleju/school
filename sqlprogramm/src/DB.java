@@ -10,20 +10,11 @@ import java.sql.Statement;
 import java.util.Scanner;
 
 public class DB {
-    String hostname;
-    String port;
-    String dbname;
-    String user;
-    String password;
+
     Connection con = null;
+    Scanner sc = new Scanner(System.in);
 
     DB(String hostname, String port, String dbname, String user, String password) {
-
-        this.hostname = hostname;
-        this.port = port;
-        this.dbname = dbname;
-        this.user = user;
-        this.password = password;
 
         try {
             System.out.println("-> Driver loaded");
@@ -36,7 +27,7 @@ public class DB {
 
         try {
             String url = "jdbc:mysql://" + hostname + ":" + port + "/" + dbname;
-            System.out.println("->  Connected to " + url);
+            System.out.println("-> Connected to " + url);
 
             con = DriverManager.getConnection(url, user, password);
 
@@ -50,7 +41,6 @@ public class DB {
     }
 
     void createNewKunde() {
-        Scanner sc = new Scanner(System.in);
         System.out.println("Geben Sie Ihren Vornamen ein: ");
         String vorname = sc.nextLine();
         System.out.println("Geben Sie Ihren Nachname ein: ");
@@ -61,7 +51,6 @@ public class DB {
         String plz = sc.nextLine();
         System.out.println("Geben Sie Ihren Ort ein: ");
         String ort = sc.nextLine();
-        sc.close();
 
         try {
             String sqlQuery = "insert into kunde (vorname, nachname, strasse, plz, ort) values (?,?,?,?,?);";
@@ -83,14 +72,12 @@ public class DB {
     }
 
     void createNewArtikel() {
-        Scanner sc = new Scanner(System.in);
         System.out.println("Geben Sie die Bezeichnung ein: ");
         String bezeichnung = sc.nextLine();
         System.out.println("Geben Sie den NettoPreis ein: ");
         Double nettoPreis = sc.nextDouble();
         System.out.println("Geben Sie die MwSt ein: ");
         Double mwst = sc.nextDouble();
-        sc.close();
 
         try {
             String sqlQuery = "insert into artikel (bezeichnung, nettoPreis, mwSt) values (?,?,?);";
@@ -111,6 +98,42 @@ public class DB {
 
     void printKundeVonBis(int von, int bis) {
         printSelectQuery("select * from kunde where idkunde between " + von + " and " + bis + ";");
+    }
+
+    void multiplyArtikelBy(int id) {
+        try {
+            // read artikel nettopreis
+            String sqlQuery = "select * from artikel where idartikel = " + id + ";";
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(sqlQuery);
+            rs.next();
+            // necessary because rs.getString() returns with , instead of .
+            String valueWithComma = rs.getString("nettoPreis").replace(",", ".");
+            double nettoPreis = Double.parseDouble(valueWithComma);
+
+            // logs
+            System.out.println("Query: " + sqlQuery);
+            System.out.println("Aktueller Nettopreis: " + nettoPreis);
+
+            // read multiplyer
+            System.out.println("Geben sie die x Prozent ein, mit denen der Nettopreis erhöht werden soll");
+            double multiplyer = sc.nextDouble();
+
+            // set new value
+            sqlQuery = "update artikel set nettoPreis = ?";
+            double newValue = (1 + multiplyer / 100) * nettoPreis;
+            PreparedStatement ps = con.prepareStatement(sqlQuery);
+            ps.setDouble(1, newValue);
+            ps.execute();
+
+            System.out.println(
+                    "Successfully changed nettoPreis of artikel " + id + " from " + nettoPreis + " to " + newValue);
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     void printSelectQuery(String sqlQuery) {
